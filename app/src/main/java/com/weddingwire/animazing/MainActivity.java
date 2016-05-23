@@ -4,12 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.ChangeTransform;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,17 +28,14 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     setFragment();
                 }
 
             });
         }
 
-
-        getSupportFragmentManager().beginTransaction().add(R.id.content, ContentFragment.newInstance("asdf", "asdf"), "TransitionTestFragment1").commit();
-
-        mFragment = ContentFragment.newInstance("test", "test");
+        getSupportFragmentManager().beginTransaction().add(R.id.content, ContentFragment.newInstance(), "TransitionTestFragment1").commit();
+        getSupportFragmentManager().executePendingTransactions();
 
         mImageView = (ImageView) findViewById(R.id.profileImage);
     }
@@ -52,40 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment() {
         mContentFragment = BlankFragment.newInstance("test", "test");
 
-        final TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(new ChangeImageTransform());
-        transitionSet.addTransition(new ChangeBounds());
-        transitionSet.addTransition(new ChangeTransform());
-        transitionSet.setDuration(300);
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.slide_up, R.anim.fade_out)
+                .add(R.id.content, mContentFragment)
+                .addToBackStack(null)
+                .commit();
 
-
-//        Transition changeTransform = TransitionInflater.from(this).
-//                inflateTransition(R.transition.change_image_transform);
-//        Transition explodeTransform = TransitionInflater.from(this).
-//                inflateTransition(android.R.transition.explode);
-//
-//        mContentFragment.setSharedElementEnterTransition(changeTransform);
-//        mContentFragment.setEnterTransition(explodeTransform);
-//
-//        mFragment.setSharedElementReturnTransition(changeTransform);
-//        mFragment.setExitTransition(explodeTransform);
-
-        mFragment.setSharedElementEnterTransition(transitionSet);
-        mFragment.setSharedElementReturnTransition(transitionSet);
-        mContentFragment.setSharedElementEnterTransition(transitionSet);
-
-//        getSupportFragmentManager().beginTransaction()
-//                .setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.slide_up, R.anim.fade_out)
-//                .replace(R.id.content, mContentFragment)
-//                .addSharedElement(mImageView, getString(R.string.fragment_image_trans))
-//                .addToBackStack(null)
-//                .commit();
-//
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.content, mContentFragment)
-//                .addSharedElement(mImageView, getString(R.string.fragment_image_trans))
-//                .addToBackStack(null)
-//                .commit();
     }
 
     @Override

@@ -38,11 +38,9 @@ public class ContentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ContentFragment newInstance(String param1, String param2) {
+    public static ContentFragment newInstance() {
         ContentFragment fragment = new ContentFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,7 +72,6 @@ public class ContentFragment extends Fragment {
         mContentFragment.setSharedElementEnterTransition(transitionSet);
         mContentFragment.setEnterTransition(TransitionInflater.from(
                 getActivity()).inflateTransition(android.R.transition.fade));
-
 
 
         image.setOnClickListener(new View.OnClickListener() {
